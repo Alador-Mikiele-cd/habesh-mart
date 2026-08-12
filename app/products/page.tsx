@@ -1,7 +1,12 @@
-
+"use client"
+import { logOut } from "../lib/auth"
 const products = () => {
+    
   return (
-    <div>products</div>
+    <div>
+        <h1>product</h1>
+        <button onClick={() => logOut()}>logout</button>
+    </div>
   )
 }
 

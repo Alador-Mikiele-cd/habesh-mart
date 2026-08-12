@@ -5,10 +5,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from '@/lib/dbConnect'
 import User from "@/models/user"
 import bcrypt from "bcryptjs"
+import authConfig from "./auth.config";
 export const {auth , handlers ,signIn , signOut} = NextAuth({
+            ...authConfig,
             providers :[
-                Google ,
-                Facebook,
+                ...authConfig.providers,
                 CredentialsProvider({
                     name: "Credentials",
                     credentials:{
