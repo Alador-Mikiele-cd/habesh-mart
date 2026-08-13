@@ -2,8 +2,10 @@ import {Schema , model , models} from "mongoose"
 import bcrypt from "bcryptjs"
 const UserSchema = new Schema({
     name:{type : String },
-    email:{type:String , required:true},
+    email:{type:String , required:true,unique: true },
+    emailVerified: { type: Date, default: null },
     password:{type : String },
+    role: { type: String, enum: ["customer", "admin"], default: "customer" }
 })
 
 UserSchema.pre("save",async function () {

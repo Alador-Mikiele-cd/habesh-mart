@@ -3,6 +3,9 @@ import Facebook from "next-auth/providers/facebook";
 import Google from "next-auth/providers/google";
 
 const authConfig = {
+    pages:{
+        signIn : "/login"
+    },
     providers:[
         Google,
         Facebook

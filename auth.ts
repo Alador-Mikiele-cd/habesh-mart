@@ -41,10 +41,37 @@ export const {auth , handlers ,signIn , signOut} = NextAuth({
                         return{
                             id : user._id.toString(),
                             name:user.name,
-                            email:user.email
+                            email:user.email,
+                            role:user.role
                         }
-                    }
+                    },
+                    
                 })
             ],
+            callbacks:{
+                ...authConfig.callbacks,
+                  async signIn({ user, account }) {
+                    if (account?.provider === "google" || account?.provider === "facebook") {
+                      await dbConnect();
+                      const existingUser = await User.findOne({ email: user.email });
+                      if (existingUser) {
+                      
+                        user.id = existingUser._id.toString();
+                      }
+                      
+                    }
+                    return true;
+                  },
+                      
+                async jwt({token , user}) {
+                    //@ts-ignore
+                        if(user) token.role = user.role
+                        return token
+                },async session({session , token}) {
+                     //@ts-ignore
+                    if(session.user) session.user.role = token.role
+                    return session
+                }
+            }
             
 })

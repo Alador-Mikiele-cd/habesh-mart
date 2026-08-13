@@ -30,6 +30,7 @@ const loginfrom = () => {
             <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className=" w-[90%] m-auto"/>
             <button onClick={handle} className=" bg-white rounded-[3px] w-20 m-auto mt-[20px]">signIn</button>
             <Link href="/signup" className="text-blue-800 text-[13px] text-center"> I do not have an account</Link>
+            <button onClick={()=> logOut()}>logout</button>
 
        </div>
     </>
