@@ -18,7 +18,7 @@ const loginfrom = () => {
       console.log("Invalid email or password");
       return;
     }
-    route.push("/product")
+    route.push("/products")
     }
   return (
     <>

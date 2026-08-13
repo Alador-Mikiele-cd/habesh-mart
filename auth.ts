@@ -42,7 +42,8 @@ export const {auth , handlers ,signIn , signOut} = NextAuth({
                             id : user._id.toString(),
                             name:user.name,
                             email:user.email,
-                            role:user.role
+                            role:user.role,
+                            emailVerified:user.emailVerified
                         }
                     },
                     
@@ -57,6 +58,9 @@ export const {auth , handlers ,signIn , signOut} = NextAuth({
                       if (existingUser) {
                       
                         user.id = existingUser._id.toString();
+                        user.role = existingUser.role
+                        //@ts-ignore
+                        user.emailVerified = existingUser.emailVerified
                       }
                       
                     }
@@ -65,11 +69,19 @@ export const {auth , handlers ,signIn , signOut} = NextAuth({
                       
                 async jwt({token , user}) {
                     //@ts-ignore
-                        if(user) token.role = user.role
+                        if(user) {
+                          token.role = user.role
+                          //@ts-ignore
+                          token.emailVerified = user.emailVerified
+                        }
                         return token
                 },async session({session , token}) {
                      //@ts-ignore
-                    if(session.user) session.user.role = token.role
+                    if(session.user) {
+                      session.user.role = token.role
+                      //@ts-ignore
+                      session.user.emailVerified = token.emailVerified
+                    }
                     return session
                 }
             }
