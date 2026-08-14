@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "./provider";
 import VerifyBanner from "./components/VerifyBanner";
+import Header from "./components/header";
+import Footer from "./components/footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -27,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <Provider>
           <VerifyBanner/>
+          <Header/>
             {children}
+          <Footer/>
         </Provider>
         
         </body>
