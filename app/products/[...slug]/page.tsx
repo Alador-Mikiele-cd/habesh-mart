@@ -1,27 +1,37 @@
-
+// app/products/[...slug]/page.tsx
 import dbConnect from "@/lib/dbConnect"
 import Product from "@/models/product"
 import Category from "@/models/category"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-export default async function FilteredProductsPage({params}: {params: Promise<{ slug: string[] }>}) {
+export default async function FilteredProductsPage({
+    params,
+}: {
+    params: Promise<{ slug: string[] }>
+}) {
     await dbConnect()
 
     const { slug } = await params
     const fullSlug = slug.join("-")
 
-    const category = await Category.findOne({ slug: fullSlug })
+   
+    const matchingCategories = await Category.find({
+        slug: { $regex: `^${fullSlug}(-|$)` }
+    })
 
-    if (!category) {
+    if (matchingCategories.length === 0) {
         notFound()
     }
 
-    const products = await Product.find({ categoryId: category._id }).populate("categoryId")
+    const categoryIds = matchingCategories.map((c) => c._id)
+    const products = await Product.find({ categoryId: { $in: categoryIds } }).populate("categoryId")
+
+    const currentCategory = matchingCategories.find((c) => c.slug === fullSlug) ?? matchingCategories[0]
 
     return (
         <div>
-            <h1>{category.name}</h1>
+            <h1>{currentCategory.name}</h1>
             <ul>
                 {products.map((product) => (
                     <li key={product._id.toString()}>

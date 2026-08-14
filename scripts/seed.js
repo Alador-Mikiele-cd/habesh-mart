@@ -41,6 +41,13 @@ async function seed() {
         path: [...menShoes.path, "Sneakers"],
         slug: `${menShoes.slug}-${slugify("Sneakers")}`,
     })
+    const menFormal = await Category.create({
+        name: "Formal",
+        level: "subcategory",
+        parentId: menShoes._id,
+        path: [...menShoes.path, "Formal"],
+        slug: `${menShoes.slug}-${slugify("Formal")}`,
+    })
 
     // ...same pattern for menFormal, women, kids, etc.
 
@@ -54,6 +61,16 @@ async function seed() {
             { size: "41", color: "white", stock: 0 },
         ],
     })
+    await Product.create({
+    name: "Oxford Formal Shoes",
+    brand: "Clarks",
+    price: 3200,
+    categoryId: menFormal._id,
+    variants: [
+        { size: "41", color: "brown", stock: 6 },
+        { size: "42", color: "black", stock: 3 },
+    ],
+})
 
     console.log("Seed complete")
     process.exit(0)
