@@ -29,7 +29,7 @@ export const POST = async (req:NextRequest)=>{
         expires:new Date(Date.now() +24 *60 * 60 * 1000)
     })
 
-    const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`
+    const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/verify-email?token=${token}`
 
     await resend.emails.send({
             from: "onboarding@resend.dev", // Resend's sandbox sender, works before you verify a domain

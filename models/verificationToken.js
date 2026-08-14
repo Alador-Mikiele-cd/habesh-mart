@@ -1,5 +1,5 @@
-import mongoose, {Schema , model , models} from "mongoose"
-
+import mongoose from "mongoose"
+const { Schema, model, models } = mongoose
 const VerificationTokenSchema = new Schema({
     userId:{type : Schema.Types.ObjectId , ref : "User", required : true},
     token: { type: String, required: true, unique: true },
