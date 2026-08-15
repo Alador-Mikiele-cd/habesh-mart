@@ -23,10 +23,24 @@ async function seed() {
         path: ["Men"],
         slug: slugify("Men"),
     })
+     const kids = await Category.create({
+        name: "Kids",
+        level: "gender",
+        path: ["Kids"],
+        slug: slugify("Kids"),
+    })
+
+     const women = await Category.create({
+        name: "Women ",
+        level: "gender",
+        path: ["Women"],
+        slug: slugify("Women "),
+    })
+
 
     // level 2: type (under Men)
     const menShoes = await Category.create({
-        name: "Shoes",
+         name: "Shoes",
         level: "type",
         parentId: men._id,
         path: [...men.path, "Shoes"],

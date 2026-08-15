@@ -70,6 +70,7 @@ export const {auth , handlers ,signIn , signOut} = NextAuth({
                 async jwt({token , user}) {
                     //@ts-ignore
                         if(user) {
+                            token.id = user.id
                           token.role = user.role
                           //@ts-ignore
                           token.emailVerified = user.emailVerified
@@ -78,6 +79,8 @@ export const {auth , handlers ,signIn , signOut} = NextAuth({
                 },async session({session , token}) {
                      //@ts-ignore
                     if(session.user) {
+                    //@ts-ignore
+                    session.user.id = token.id
                       session.user.role = token.role
                       //@ts-ignore
                       session.user.emailVerified = token.emailVerified

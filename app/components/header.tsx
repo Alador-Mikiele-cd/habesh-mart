@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import CategoryNav from "./CategoryNav";
 
 const Header = () => {
   return (
@@ -83,68 +84,9 @@ const Header = () => {
             </button>
           </form>
         </div>
-
-        {/* Navigation */}
-        <nav className="mt-5 overflow-x-auto">
-          <ul className="flex min-w-max gap-7 text-sm">
-
-            <li>
-              <Link
-                href="/category/men"
-                className="transition hover:text-gray-500"
-              >
-                Men
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/category/women"
-                className="transition hover:text-gray-500"
-              >
-                Women
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/category/kids"
-                className="transition hover:text-gray-500"
-              >
-                Kids
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/category/sneakers"
-                className="transition hover:text-gray-500"
-              >
-                Sneakers
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/category/crocs"
-                className="transition hover:text-gray-500"
-              >
-                Crocs
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/category/sports"
-                className="transition hover:text-gray-500"
-              >
-                Sports
-              </Link>
-            </li>
-
-          </ul>
-        </nav>
-
+        <CategoryNav/>
+        
+      
       </div>
     </header>
   );

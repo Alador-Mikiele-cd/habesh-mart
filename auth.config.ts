@@ -13,7 +13,7 @@ const authConfig = {
     callbacks:{
         authorized({auth , request:{nextUrl}}) {
             const isLoggedIn = !!auth
-            const isProtected = nextUrl.pathname.startsWith("/products")
+            const isProtected = nextUrl.pathname.startsWith("/cart")
 
             if(isProtected && !isLoggedIn){
                 return false
