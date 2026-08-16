@@ -66,7 +66,7 @@ const CartPage = () => {
     }
 
     const subtotal = items.reduce(
-        (sum, item) => sum + item.productId.price * item.quantity,
+        (sum, item) => sum + (item.productId?.price ?? 0) * item.quantity,
         0
     )
 
@@ -102,11 +102,15 @@ const CartPage = () => {
                         {items.map((item) => (
                             <li key={item._id} className="flex items-center justify-between gap-4 py-5">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-900">{item.productId.name}</p>
+                                    <p className="text-sm font-medium text-gray-900">
+                                        {item.productId?.name ?? "Product no longer available"}
+                                    </p>
                                     <p className="mt-1 text-xs text-gray-500">
                                         Size {item.size} · {item.color}
                                     </p>
-                                    <p className="mt-1 text-sm text-gray-900">{item.productId.price} ETB</p>
+                                    <p className="mt-1 text-sm text-gray-900">
+                                        {item.productId?.price ?? 0} ETB
+                                    </p>
                                 </div>
 
                                 <div className="flex items-center gap-4">
