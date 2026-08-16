@@ -1,4 +1,4 @@
-import Loginfrom from "../../components/loginfrom"
+import Loginfrom from "@/app/components/loginfrom"
 const login = () => {
   return (
     <>

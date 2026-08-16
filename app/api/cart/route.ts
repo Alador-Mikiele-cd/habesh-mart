@@ -86,3 +86,81 @@ export const GET = async () => {
         return NextResponse.json({ message: "Something went wrong" }, { status: 500 })
     }
 }
+
+// DELETE — remove one item from the cart
+export const DELETE = async (req: NextRequest) => {
+    try {
+        await dbConnect()
+        const session = await auth()
+
+        if (!session?.user) {
+            return NextResponse.json({ message: "not logged in" }, { status: 401 })
+        }
+
+        const { itemId } = await req.json()
+
+        const cart = await Cart.findOne({ userId: session.user.id })
+        if (!cart) {
+            return NextResponse.json({ message: "cart not found" }, { status: 404 })
+        }
+
+        cart.items = cart.items.filter((item) => item._id.toString() !== itemId)
+        await cart.save()
+        await cart.populate("items.productId")
+        return NextResponse.json({ cart }, { status: 200 })
+
+    } catch (err) {
+        console.error(err)
+        return NextResponse.json({ message: "Something went wrong" }, { status: 500 })
+    }
+}
+
+export const PATCH = async (req: NextRequest) => {
+    try {
+        await dbConnect()
+        const session = await auth()
+
+        if (!session?.user) {
+            return NextResponse.json({ message: "not logged in" }, { status: 401 })
+        }
+
+        const { itemId, quantity } = await req.json()
+
+        if (quantity < 1) {
+            return NextResponse.json({ message: "quantity must be at least 1" }, { status: 400 })
+        }
+
+        const cart = await Cart.findOne({ userId: session.user.id })
+        if (!cart) {
+            return NextResponse.json({ message: "cart not found" }, { status: 404 })
+        }
+
+        const item = cart.items.find((item) => item._id.toString() === itemId)
+        if (!item) {
+            return NextResponse.json({ message: "item not found in cart" }, { status: 404 })
+        }
+
+        // stock check — same pattern as POST
+        const product = await Product.findById(item.productId)
+        if (!product) {
+            return NextResponse.json({ message: "product no longer exists" }, { status: 404 })
+        }
+
+        const matchedVariant = product.variants.find(
+            (v) => v.size === item.size && v.color === item.color
+        )
+
+        if (!matchedVariant || matchedVariant.stock < quantity) {
+            return NextResponse.json({ message: "not enough stock" }, { status: 400 })
+        }
+
+        item.quantity = quantity
+        await cart.save()
+        await cart.populate("items.productId")
+        return NextResponse.json({ cart }, { status: 200 })
+
+    } catch (err) {
+        console.error(err)
+        return NextResponse.json({ message: "Something went wrong" }, { status: 500 })
+    }
+}

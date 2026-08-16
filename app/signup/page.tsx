@@ -1,4 +1,4 @@
-import Signupfrom from "../../components/signupfrom"
+import Signupfrom from "@/app/components/signupfrom"
 const signup = () => {
   return (
     <>

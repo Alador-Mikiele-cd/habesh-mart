@@ -2,33 +2,42 @@ import dbConnect from "@/lib/dbConnect";
 import Product from "@/models/product";
 import { notFound } from "next/navigation";
 import AddToCartButton from "@/app/components/AddToCartButton"
-export default async function ProductDetailPage({params}:{ params: Promise<{id:string}>} ) {
+
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
     await dbConnect()
-    const{id} = await params
+    const { id } = await params
     const product = await Product.findById(id).populate("categoryId").lean()
 
-    if (!product) {
-        notFound()
-    }
-    return(
-        <>
-            <div>
-            <h1>{product.name}</h1>
-            <p>Brand: {product.brand}</p>
-            <p>Price: {product.price} ETB</p>
-            <p>Category: {product.categoryId?.name}</p>
+if (!product) {
+    notFound()
+}
 
-            <h2>Available options</h2>
-            <ul>
-                {product.variants.map((variant:any, i:any) => (
-                    <li key={i}>
-                        Size {variant.size}, {variant.color} — {variant.stock > 0 ? `${variant.stock} in stock` : "Out of stock"}
-                    </li>
-                ))}
-            </ul>
+const plainProduct = JSON.parse(JSON.stringify(product))
+
+    return (
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+                {/* image placeholder */}
+                <div className="aspect-square w-full bg-gray-100 flex items-center justify-center text-sm text-gray-400">
+                    No image
+                </div>
+
+                {/* details */}
+                <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-400">
+                        {product.categoryId?.name}
+                    </p>
+                    <h1 className="mt-1 text-2xl font-bold tracking-tight text-gray-900">
+                        {product.name}
+                    </h1>
+                    <p className="mt-1 text-sm text-gray-500">{product.brand}</p>
+                    <p className="mt-4 text-lg text-gray-900">{product.price} ETB</p>
+
+                    <div className="mt-8 border-t border-gray-200 pt-6">
+                        <AddToCartButton productId={product._id.toString()} variants={product.variants} />
+                    </div>
+                </div>
+            </div>
         </div>
-        <AddToCartButton productId={product._id.toString()} variants={product.variants} />
-        </>
     )
-
 }
