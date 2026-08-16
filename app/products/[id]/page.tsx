@@ -1,10 +1,11 @@
 import dbConnect from "@/lib/dbConnect";
 import Product from "@/models/product";
 import { notFound } from "next/navigation";
+import AddToCartButton from "@/app/components/AddToCartButton"
 export default async function ProductDetailPage({params}:{ params: Promise<{id:string}>} ) {
     await dbConnect()
     const{id} = await params
-    const product = await Product.findById(id).populate("categoryId")
+    const product = await Product.findById(id).populate("categoryId").lean()
 
     if (!product) {
         notFound()
@@ -26,6 +27,7 @@ export default async function ProductDetailPage({params}:{ params: Promise<{id:s
                 ))}
             </ul>
         </div>
+        <AddToCartButton productId={product._id.toString()} variants={product.variants} />
         </>
     )
 

@@ -32,7 +32,7 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ message: "not enough stock" }, { status: 400 })
         }
 
-        // find or create this user's cart
+
         let cart = await Cart.findOne({ userId: session.user.id })
 
         if (!cart) {
@@ -64,4 +64,25 @@ export const POST = async (req: NextRequest) => {
         return NextResponse.json({ message: "Something went wrong" }, { status: 500 })
     }
 }
+export const GET = async () => {
+    try {
+        await dbConnect()
+        const session = await auth()
 
+        if (!session?.user) {
+            return NextResponse.json({ message: "not logged in" }, { status: 401 })
+        }
+
+        const cart = await Cart.findOne({ userId: session.user.id }).populate("items.productId")
+
+        if (!cart) {
+            return NextResponse.json({ cart: { items: [] } }, { status: 200 })
+        }
+
+        return NextResponse.json({ cart }, { status: 200 })
+
+    } catch (err) {
+        console.error(err)
+        return NextResponse.json({ message: "Something went wrong" }, { status: 500 })
+    }
+}
