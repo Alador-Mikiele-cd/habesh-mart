@@ -49,44 +49,21 @@ export const {auth , handlers ,signIn , signOut} = NextAuth({
                     
                 })
             ],
-            callbacks:{
-                ...authConfig.callbacks,
-                  async signIn({ user, account }) {
-                    if (account?.provider === "google" || account?.provider === "facebook") {
-                      await dbConnect();
-                      const existingUser = await User.findOne({ email: user.email });
-                      if (existingUser) {
-                      
-                        user.id = existingUser._id.toString();
-                        user.role = existingUser.role
-                        //@ts-ignore
-                        user.emailVerified = existingUser.emailVerified
-                      }
-                      
-                    }
-                    return true;
-                  },
-                      
-                async jwt({token , user}) {
-                    //@ts-ignore
-                        if(user) {
-                            token.id = user.id
-                          token.role = user.role
-                          //@ts-ignore
-                          token.emailVerified = user.emailVerified
-                        }
-                        return token
-                },async session({session , token}) {
-                     //@ts-ignore
-                    if(session.user) {
-                    //@ts-ignore
-                    session.user.id = token.id
-                      session.user.role = token.role
-                      //@ts-ignore
-                      session.user.emailVerified = token.emailVerified
-                    }
-                    return session
-                }
+           callbacks: {
+    ...authConfig.callbacks,
+    async signIn({ user, account }) {
+        if (account?.provider === "google" || account?.provider === "facebook") {
+            await dbConnect();
+            const existingUser = await User.findOne({ email: user.email });
+            if (existingUser) {
+                user.id = existingUser._id.toString();
+                user.role = existingUser.role
+                //@ts-ignore
+                user.emailVerified = existingUser.emailVerified
             }
+        }
+        return true;
+    },
+}
             
 })

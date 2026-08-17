@@ -5,5 +5,5 @@ export const {auth : proxy} = NextAuth(authConfig)
 export default proxy;
 
 export const config = {
-    matcher :["/cart/:path*"]
+    matcher: ["/cart/:path*", "/admin/:path*"]
 }

@@ -1,7 +1,7 @@
 "use client"
 import { login, logOut } from "../lib/auth"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 
@@ -9,19 +9,25 @@ const loginfrom = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const route = useRouter()
-
-    async function handle() {
-        const result = await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
-        })
-        if (result?.error) {
-            console.log("Invalid email or password");
-            return;
-        }
-        route.push("/products")
+    const searchParams = useSearchParams()
+async function handle() {
+    const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+    })
+    if (result?.error) {
+        console.log("Invalid email or password");
+        return;
     }
+
+    const callbackUrlRaw = searchParams.get("callbackUrl") || "/products"
+    const callbackUrl = callbackUrlRaw.startsWith("http")
+        ? new URL(callbackUrlRaw).pathname
+        : callbackUrlRaw
+
+    window.location.href = callbackUrl
+}
 
     return (
         <div className="mx-auto mt-16 w-full max-w-sm border border-gray-200 p-8">
